@@ -18,6 +18,8 @@ var _numScoreSounds = 10,
 var _scoreSounds = [],
   _hurtSounds = [];
 
+var _currentScoreSound;
+
 var _bgColor = 0xDDEEFF,
   _background;
 
@@ -100,8 +102,8 @@ function preload() {
   _game.load.spritesheet('frog', _baseUrl + 'images/frog.png', 80, 64);
   _game.load.spritesheet('clouds', _baseUrl + 'images/clouds.png', 128, 64);
 
-  _game.load.image('pipe', _baseUrl + 'images/pipe.png');//.onFileComplete.add(showLoadingProgress);
-  _game.load.image('ground', _baseUrl + 'images/ground.png');//.onFileComplete.add(showLoadingProgress);
+  _game.load.image('pipe', _baseUrl + 'images/pipe.png');
+  _game.load.image('ground', _baseUrl + 'images/ground.png');
 
   loadAudio('bgm', _baseUrl + 'sounds/bgm');
   loadAudio('flap', _baseUrl + 'sounds/flap');
@@ -264,17 +266,24 @@ function initSounds() {
 }
 
 function randomPlaySound(list, count) {
-  if (count == 1)
-    list[0].play();
-  else if (count > 1)
-    list[Math.floor(Math.random() * count)].play();
+  var sound;
+  if (count == 1) {
+    sound = list[0];
+    sound.play();
+  } else if (count > 1) {
+    sound = list[Math.floor(Math.random() * count)];
+    sound.play();
+  }
+  return sound;
 }
 
 function playScoreSound() {
-  randomPlaySound(_scoreSounds, _numScoreSounds);
+  _currentScoreSound = randomPlaySound(_scoreSounds, _numScoreSounds);
 }
 
 function playHurtSound() {
+  if (_currentScoreSound)
+    _currentScoreSound.stop();
   randomPlaySound(_hurtSounds, _numHurtSounds);
 }
 
