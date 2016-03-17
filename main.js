@@ -1,5 +1,12 @@
 (function(){
 
+var TEXT_LOADING = 'Loading...\n\n历史的行程: %s %';
+var TEXT_SCORE = '+ %s s';
+var TEXT_GAME_OVER = '我为长者续命%s秒';
+var TEXT_TRY_AGAIN = '重新续';
+var TEXT_PLAY_BGM = '请州长夫人演唱';
+
+
 var _gravity = 40,
   _speed = 390,
   _flap = 620,
@@ -17,6 +24,8 @@ var _numScoreSounds = 10,
 
 var _scoreSounds = [],
   _hurtSounds = [];
+
+var _currentScoreSound;
 
 var _bgColor = 0xDDEEFF,
   _background;
@@ -71,7 +80,7 @@ var _loadingText;
 var _debug = false;
 
 function showLoadingText(percent) {
-  _loadingText.setText('Loading...\n\n历史的行程: ' + percent + ' %');
+  _loadingText.setText(TEXT_LOADING.replace('%s', percent));
 }
 
 function initLoadingText() {
@@ -100,8 +109,8 @@ function preload() {
   _game.load.spritesheet('frog', _baseUrl + 'images/frog.png', 80, 64);
   _game.load.spritesheet('clouds', _baseUrl + 'images/clouds.png', 128, 64);
 
-  _game.load.image('pipe', _baseUrl + 'images/pipe.png');//.onFileComplete.add(showLoadingProgress);
-  _game.load.image('ground', _baseUrl + 'images/ground.png');//.onFileComplete.add(showLoadingProgress);
+  _game.load.image('pipe', _baseUrl + 'images/pipe.png');
+  _game.load.image('ground', _baseUrl + 'images/ground.png');
 
   loadAudio('bgm', _baseUrl + 'sounds/bgm');
   loadAudio('flap', _baseUrl + 'sounds/flap');
@@ -264,17 +273,24 @@ function initSounds() {
 }
 
 function randomPlaySound(list, count) {
-  if (count == 1)
-    list[0].play();
-  else if (count > 1)
-    list[Math.floor(Math.random() * count)].play();
+  var sound;
+  if (count == 1) {
+    sound = list[0];
+    sound.play();
+  } else if (count > 1) {
+    sound = list[Math.floor(Math.random() * count)];
+    sound.play();
+  }
+  return sound;
 }
 
 function playScoreSound() {
-  randomPlaySound(_scoreSounds, _numScoreSounds);
+  _currentScoreSound = randomPlaySound(_scoreSounds, _numScoreSounds);
 }
 
 function playHurtSound() {
+  if (_currentScoreSound)
+    _currentScoreSound.stop();
   randomPlaySound(_hurtSounds, _numHurtSounds);
 }
 
@@ -350,7 +366,7 @@ function addScore(_, inv) {
 }
 
 function showScore() {
-  _scoreText.setText('+ ' + _score + ' s');
+  _scoreText.setText(TEXT_SCORE.replace('%s', _score));
 }
 
 function setGameOver() {
@@ -361,7 +377,7 @@ function setGameOver() {
 }
 
 function showGameOver() {
-  _gameOverText.setText('我为长者续命' + _score + '秒');
+  _gameOverText.setText(TEXT_GAME_OVER.replace('%s', _score));
   _gameOverText.renderable = true;
   _tryAgainText.renderable = true;
   _tryAgainSprite.events.onInputDown.addOnce(reset);
@@ -408,7 +424,7 @@ function initTexts() {
   _playBgmText = _game.add.text(
     0,
     0,
-    '请州长夫人演唱',
+    TEXT_PLAY_BGM,
     {
       font: '16px Arial',
       fill: '#fff',
@@ -439,7 +455,7 @@ function initTexts() {
   _tryAgainText = _game.add.text(
     _game.world.width / 2,
     _game.world.height - _game.world.height / 6,
-    '重新续',
+    TEXT_TRY_AGAIN,
     {
       font: '24px Arial',
       fill: '#fff',
