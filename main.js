@@ -2,7 +2,7 @@
 
 var TEXT_LOADING = 'Loading...\n\n历史的行程: %s %';
 var TEXT_SCORE = '+ %s s';
-var TEXT_GAME_OVER = '我为长者续命%s秒\n我zhi己的生命减少%s秒';
+var TEXT_GAME_OVER = '我为长者续命%s秒\n自己的生命减少%s秒\n效率efficiency: %s%';
 var TEXT_TRY_AGAIN = '重新续';
 var TEXT_PLAY_BGM = '请州长夫人演唱';
 var TEXT_TIME_ELAPSED = '- %s s';
@@ -395,7 +395,9 @@ function setGameOver() {
 }
 
 function showGameOver() {
-  _gameOverText.setText(TEXT_GAME_OVER.replace('%s', _score).replace('%s', _timeElapsed));
+  var a = Math.floor(_score / _timeElapsed * 100);
+  a = TEXT_GAME_OVER.replace('%s', _score).replace('%s', _timeElapsed).replace('%s', a);
+  _gameOverText.setText(a);
   _gameOverText.renderable = true;
   _tryAgainText.renderable = true;
   _tryAgainSprite.events.onInputDown.addOnce(reset);
