@@ -370,8 +370,12 @@ function updateFrog2() {
 function checkCollision() {
   if (_frog.body.bottom >= _game.world.bounds.bottom) {
     setGameOver();
+    return;
   }
-  _game.physics.overlap(_frog, _pipes, setGameOver);
+  if (_game.physics.overlap(_frog, _pipes)) {
+    setGameOver();
+    return;
+  }
   // Add score
   _game.physics.overlap(_frog, _pipeInvisibleLines, addScore);
 }
