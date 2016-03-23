@@ -7,6 +7,7 @@ var TEXT_TRY_AGAIN = '重新续';
 var TEXT_PLAY_BGM = '请州长夫人演唱';
 var TEXT_TIME_ELAPSED = '- %s s';
 var TEXT_TINY_TIPS = '[微小的提示]\n为了获得坠好的游戏体验，请：\n打开音量\n穿上红色的衣服';
+var TEXT_FONT = '"Segoe UI", "Microsoft YaHei", sans-serif, 宋体'; // 插入宋体
 
 var _gravity = 40,
   _speed = 390,
@@ -95,7 +96,7 @@ function initLoadingText() {
     _game.world.height / 4,
     TEXT_TINY_TIPS,
     {
-      font: '16px Arial',
+      font: '16px ' + TEXT_FONT,
       fill: '#fff',
       align: 'center'
     }
@@ -107,7 +108,7 @@ function initLoadingText() {
     _game.world.height / 2,
     '',
     {
-      font: '24px Arial',
+      font: '24px ' + TEXT_FONT,
       fill: '#f00',
       align: 'center'
     }
@@ -428,7 +429,7 @@ function initFeedback() {
     0,
     _feedback,
     {
-      font: '16px Arial',
+      font: '14px ' + TEXT_FONT,
       fill: '#fff',
       stroke: '#430',
       strokeThickness: 4,
@@ -450,7 +451,7 @@ function initTexts() {
     0,
     TEXT_PLAY_BGM,
     {
-      font: '16px Arial',
+      font: '14px ' + TEXT_FONT,
       fill: '#fff',
       stroke: '#430',
       strokeThickness: 4,
@@ -467,7 +468,7 @@ function initTexts() {
     _game.world.height / 4,
     '',
     {
-      font: '16px Arial',
+      font: '14px ' + TEXT_FONT,
       fill: '#fff',
       stroke: '#430',
       strokeThickness: 4,
@@ -481,7 +482,7 @@ function initTexts() {
     _scoreText.y + _scoreText.height,
     '',
     {
-      font: '16px Arial',
+      font: '14px ' + TEXT_FONT,
       fill: '#f00',
       align: 'center'
     }
@@ -493,7 +494,7 @@ function initTexts() {
     _game.world.height - _game.world.height / 6,
     TEXT_TRY_AGAIN,
     {
-      font: '24px Arial',
+      font: '22px ' + TEXT_FONT,
       fill: '#fff',
       stroke: '#430',
       strokeThickness: 4,
@@ -510,7 +511,7 @@ function initTexts() {
     _game.world.height / 2,
     '',
     {
-      font: '24px Arial',
+      font: '18px ' + TEXT_FONT,
       fill: '#fff',
       stroke: '#430',
       strokeThickness: 4,
@@ -592,10 +593,11 @@ function create() {
 }
 
 function setTimeElapsed() {
-  _timeElapsed = Math.floor(_game.time.elapsedSecondsSince(_startTime));
-  _timeElapsed += 1;
-
-  _timeElapsedText.setText(TEXT_TIME_ELAPSED.replace('%s', _timeElapsed));
+  var a = Math.floor(_game.time.elapsedSecondsSince(_startTime)) + 1;
+  if (_timeElapsed != a) {
+    _timeElapsed = a;
+    _timeElapsedText.setText(TEXT_TIME_ELAPSED.replace('%s', _timeElapsed));
+  }
 }
 
 function update() {
