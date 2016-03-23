@@ -7,7 +7,7 @@ var TEXT_TRY_AGAIN = '重新续';
 var TEXT_PLAY_BGM = '请州长夫人演唱';
 var TEXT_TIME_ELAPSED = '- %s s';
 var TEXT_TINY_TIPS = '[微小的提示]\n为了获得坠好的游戏体验，请：\n打开音量\n穿上红色的衣服';
-var TEXT_FONT = '"Segoe UI", "Microsoft YaHei", sans-serif, 宋体'; // 插入宋体
+var TEXT_FONT = '"Segoe UI", "Microsoft YaHei", 宋体'; // 插入宋体
 
 var _gravity = 40,
   _speed = 390,
