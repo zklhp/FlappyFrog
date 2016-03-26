@@ -6,8 +6,9 @@ var TEXT_GAME_OVER = '我为长者续命%s秒\n志己的生命减少%s秒\n而�
 var TEXT_TRY_AGAIN = '重新续';
 var TEXT_PLAY_BGM = '请州长夫人演唱';
 var TEXT_TIME_ELAPSED = '- %s s';
+var TEXT_TOTAL_TIME_ELAPSED = '累计被续 %s 秒';
 var TEXT_TINY_TIPS = '[微小的提示]\n为了获得坠好的游戏体验，请：\n打开音量\n穿上红色的衣服';
-var TEXT_FONT = '"Segoe UI", "Microsoft YaHei", 宋体'; // 插入宋体
+var TEXT_FONT = '"Segoe UI", "Microsoft YaHei", 宋体, sans-serif'; // 插入宋体
 
 var _gravity = 40,
   _speed = 390,
@@ -83,6 +84,9 @@ var _loadingText,
 var _timeElapsedText,
   _startTime,
   _timeElapsed;
+
+var _totalTimeElapsedText,
+  _totalTimeElapsed = 0;
 
 var _debug = false;
 
@@ -400,6 +404,10 @@ function setGameOver() {
 }
 
 function showGameOver() {
+  _totalTimeElapsed += _timeElapsed;
+  _totalTimeElapsedText.setText(TEXT_TOTAL_TIME_ELAPSED.replace('%s', _totalTimeElapsed));
+  _totalTimeElapsedText.renderable = true;
+
   var a = Math.floor(_score / _timeElapsed * 100);
   a = TEXT_GAME_OVER.replace('%s', _score).replace('%s', _timeElapsed).replace('%s', a);
   _gameOverText.setText(a);
@@ -489,6 +497,18 @@ function initTexts() {
   );
   _timeElapsedText.anchor.setTo(0.5, 0.5);
 
+  _totalTimeElapsedText = _game.add.text(
+    _game.world.width / 2,
+    0,
+    '',
+    {
+      font: '14px ' + TEXT_FONT,
+      fill: '#f00',
+      align: 'center'
+    }
+  );
+  _totalTimeElapsedText.anchor.setTo(0.5, 0);
+
   _tryAgainText = _game.add.text(
     _game.world.width / 2,
     _game.world.height - _game.world.height / 6,
@@ -522,6 +542,8 @@ function initTexts() {
 }
 
 function start() {
+  _totalTimeElapsedText.renderable = false;
+
   _frog.body.allowGravity = true;
   startPipes();
   _gameStarted = true;
@@ -564,6 +586,8 @@ function initControls() {
 
 
 function reset() {
+  _timeElapsedText.setText('');
+
   _score = 0;
   _gameOver = false;
   _gameStarted = false;
