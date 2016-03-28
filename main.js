@@ -65,7 +65,8 @@ var _bgmKeyCode = [
 ];
 
 var _flapKeyCode = [
-  Phaser.Keyboard.E
+  Phaser.Keyboard.E,
+  Phaser.Keyboard.SPACEBAR
 ];
 
 var _feedbackKeyCode = [
